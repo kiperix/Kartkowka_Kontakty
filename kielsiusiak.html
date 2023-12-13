@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact App</title>
+  <style>
+    body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  margin: 20px;
+  background-color: #f4f4f4;
+}
+ 
+h1 {
+  color: #333;
+}
+ 
+div {
+  margin-bottom: 15px;
+}
+ 
+label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+ 
+input, select {
+  padding: 8px;
+  margin-bottom: 10px;
+  width: 200px;
+  box-sizing: border-box;
+}
+ 
+button {
+  padding: 10px;
+  background-color: #1ea7d1;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+ 
+button:hover {
+  background-color: #07b15c;
+}
+ 
+ul {
+  list-style-type: none;
+  padding: 0;
+}
+ 
+li {
+  margin-bottom: 10px;
+  background-image: url('https://deviniti.com/app/uploads/2022/04/Mobile@4x.png');
+  padding: 10px;
+  border-radius: 4px;
+}
+ 
+#contactDetails {
+  margin-top: 15px;
+}
+  </style>
+</head>
+<body>
+ 
+  <h1>Aplikacja kontaktowa</h1>
+ 
+  <div>
+    <label for="contactName">Imie:</label>
+    
+    <input type="text" id="contactName" placeholder="Wpisz imie">
+   
+    <label for="phoneNumber">Numer telefonu:</label>
+   
+    <input type="text" id="phoneNumber" placeholder="Wpisz numer telefonu">
+    
+    <button onclick="myContactApp.addContact()">Dodaj kontakt</button>
+  </div>
+ 
+  <div>
+   
+    <label for="selectedContact">Wybierz kontakt:</label>
+  
+    <select id="selectedContact"></select>
+    
+    <button onclick="myContactApp.displayContact()">Wyswietl kontakt</button>
+  </div>
+ 
+  <div id="contactDetails"></div>
+ 
+  <div>
+   
+    <h2>Wszystkie kontakty</h2>
+   
+    <button onclick="myContactApp.displayAllContact()">Wyswietl Wszystkie kontakty</button>
+    <ul id="allContacts"></ul>
+  </div>
+  <script>
+    class Contact {
+      constructor(name, phoneNumber) {
+        this.name = name;
+        this.phoneNumber = phoneNumber;
+      }
+    }
+ 
+    class ContactApp {
+      constructor() {
+        this.contacts = [];
+        this.selectedContact = document.getElementById('selectedContact');
+        this.allContactsList = document.getElementById('allContacts');
+        this.contactDetails = document.getElementById('contactDetails');
+      }
+ 
+      addContact() {
+        const name = document.getElementById('contactName').value;
+        const phoneNumber = document.getElementById('phoneNumber').value;
+        const newContact = new Contact(name, phoneNumber);
+        this.contacts.push(newContact);
+        this.updateContactList();
+        console.log(`${newContact.name} dodany do kontaktow.`);
+      }
+ 
+      displayContact() {
+        const selectedName = this.selectedContact.value;
+        const contact = this.contacts.find(contact => contact.name === selectedName);
+        this.displayContactDetails(contact);
+      }
+ 
+      displayAllContacts() {
+        this.allContactsList.innerHTML = '';
+        this.contacts.forEach(contact => {
+          const listItem = document.createElement('li');
+          listItem.textContent = `${contact.name} - ${contact.phoneNumber}`;
+          this.allContactsList.appendChild(listItem);
+        });
+      }
+ 
+      updateContactList() {
+        this.selectedContact.innerHTML = '';
+        this.contacts.forEach(contact => {
+          const option = document.createElement('option');
+          option.value = contact.name;
+          option.text = contact.name;
+          this.selectedContact.add(option);
+        });
+      }
+ 
+      displayContactDetails(contact) {
+        if (contact) {
+          this.contactDetails.innerHTML = `<p>Imie: ${contact.name}</p><p>numer telefonu: ${contact.phoneNumber}</p>`;
+        } else {
+          this.contactDetails.innerHTML = `kontakt nie dziala.`;
+        }
+      }
+    }
+ 
+    const myContactApp = new ContactApp();
+  </script>
+ 
+</body>
+</html>
